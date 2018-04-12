@@ -1,7 +1,11 @@
-#pragma once
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QtWidgets/QMainWindow>
-#include "ui_mainwindow.h"
+
+namespace Ui {
+	class MainWindowClass;
+}
 
 class MainWindow : public QMainWindow
 {
@@ -10,6 +14,11 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(QWidget *parent = Q_NULLPTR);
 
+	~MainWindow();
+private slots:
+
 private:
-	Ui::MainWindowClass ui;
+	Ui::MainWindowClass* ui;
 };
+
+#endif

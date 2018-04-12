@@ -115,17 +115,37 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="openglwidget.cpp" />
+    <ClCompile Include="scene.cpp" />
+    <ClCompile Include="standardshader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="mainwindow.ui" />
+    <QtUic Include="openglwidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="mainwindow.qrc" />
+    <QtRcc Include="shaders.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="openglwidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="samplemodels.h" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="standardshader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
