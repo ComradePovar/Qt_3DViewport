@@ -26,11 +26,14 @@ protected:
 	void mouseReleaseEvent(QMouseEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void wheelEvent(QWheelEvent *event) override;
+	void keyPressEvent(QKeyEvent *event) override;
+
 
 private:
 	QPoint m_lastPos;
 	bool m_isPan;
 	bool m_isRotating;
+	GLenum m_polygonMode;
 
 	Scene* m_scene;
 	Model* m_cube;

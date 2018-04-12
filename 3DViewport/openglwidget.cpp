@@ -1,4 +1,6 @@
 #include <QMouseEvent>
+#include <QKeyEvent>
+#include <qapplication.h>
 
 #include "openglwidget.h"
 #include "standardshader.h"
@@ -9,11 +11,13 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 	
 	m_isPan = false;
 	m_isRotating = false;
+	setFocusPolicy(Qt::StrongFocus);
 }
 
 void OpenGLWidget::initializeGL() {
 	initializeOpenGLFunctions();
 	glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
+	m_polygonMode = GL_FILL;
 
 	m_scene = new Scene();
 	m_camera = new Camera();
@@ -87,6 +91,15 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* event) {
 	}
 }
 
+void OpenGLWidget::keyPressEvent(QKeyEvent *event) {
+	if (event->key() == Qt::Key::Key_T) {
+		m_polygonMode == GL_FILL ? GL_LINE : GL_FILL;
+		glPolygonMode(GL_FRONT_AND_BACK, m_polygonMode);
+	}
+	else {
+		QOpenGLWidget::keyPressEvent(event);
+	}
+}
 void OpenGLWidget::wheelEvent(QWheelEvent *event) {
 	m_camera->processZoom(event->angleDelta().y());
 	update();
