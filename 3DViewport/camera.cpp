@@ -58,7 +58,7 @@ void Camera::processRotation(float dx, float dy, const QVector3D* target)
 
 	QVector3D ortho = QVector3D::crossProduct(m_target - m_position, m_up);
 	QMatrix4x4 rotOrtho;
-	rotOrtho.rotate(dy * ROTATION_SPEED, ortho);
+	rotOrtho.rotate(-dy * ROTATION_SPEED, ortho);
 	localCameraPos = rotOrtho * localCameraPos;
 	QVector3D newCameraPos = localCameraPos + rotTarget;
 	QVector3D newViewDirection = rotTarget - newCameraPos;

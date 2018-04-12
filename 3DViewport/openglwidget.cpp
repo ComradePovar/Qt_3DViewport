@@ -21,6 +21,10 @@ void OpenGLWidget::initializeGL() {
 	
 	m_cube = new Model(quadData, quadIndices);
 	m_scene->addModel(m_cube);
+
+	glEnable(GL_PRIMITIVE_RESTART);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPrimitiveRestartIndex(quadData.size() / 6);
 }
 
 void OpenGLWidget::paintGL() {

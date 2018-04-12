@@ -2,13 +2,14 @@
 #define OPENGLWIDGET_H
 
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLFunctions>
 #include "scene.h"
 #include "camera.h"
 #include "standardshader.h"
 
 
-class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_4_3_Core
 {
 	Q_OBJECT
 
