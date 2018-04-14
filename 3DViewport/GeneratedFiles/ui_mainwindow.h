@@ -52,7 +52,7 @@ public:
     {
         if (MainWindowClass->objectName().isEmpty())
             MainWindowClass->setObjectName(QStringLiteral("MainWindowClass"));
-        MainWindowClass->resize(1376, 940);
+        MainWindowClass->resize(887, 564);
         actionExit = new QAction(MainWindowClass);
         actionExit->setObjectName(QStringLiteral("actionExit"));
         centralWidget = new QWidget(MainWindowClass);
@@ -66,7 +66,7 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         openGLWidget = new OpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setMinimumSize(QSize(1024, 768));
+        openGLWidget->setMinimumSize(QSize(600, 400));
 
         gridLayout->addWidget(openGLWidget, 0, 0, 1, 1);
 
@@ -112,7 +112,7 @@ public:
         MainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1376, 26));
+        menuBar->setGeometry(QRect(0, 0, 887, 21));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menu1 = new QMenu(menuBar);

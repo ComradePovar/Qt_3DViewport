@@ -4,7 +4,7 @@
 
 Mesh::Mesh(QVector<GLfloat> data, QVector<GLuint> indices) 
 	: m_data(data), m_indices(indices) {
-
+	Q_ASSERT(data.count() % 3 == 0);
 	setupVAO();
 }
 

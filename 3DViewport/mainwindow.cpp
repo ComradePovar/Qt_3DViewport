@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
 	ui(new Ui::MainWindowClass)
 {
 	ui->setupUi(this);
-	ui->openGLWidget->setFocus();
 }
 
 MainWindow::~MainWindow() {
