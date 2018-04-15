@@ -36,7 +36,10 @@ void Camera::updateViewMatrix() {
 	m_view = view;
 }
 
-void Camera::processPan(float dx, float dy) {
+void Camera::processPan(float x, float y) {
+	float dx = x - m_lastPoint.x();
+	float dy = y - m_lastPoint.y();
+
 	QVector3D delta;
 	QVector3D right = QVector3D::crossProduct(m_target - m_position, m_up).normalized();
 	delta = MOVEMENT_SPEED * (m_up * dy - right * dx);
@@ -44,10 +47,14 @@ void Camera::processPan(float dx, float dy) {
 	
 	m_target += delta;
 	updateViewMatrix();
+	m_lastPoint = QPoint(x, y);
 }
 
-void Camera::processRotation(float dx, float dy, const QVector3D* target)
+void Camera::processRotation(float x, float y, const QVector3D* target)
 {
+	float dx = x - m_lastPoint.x();
+	float dy = y - m_lastPoint.y();
+
 	QVector3D rotTarget = target == nullptr ? m_target : *target;
 	
 	QMatrix4x4 rotY;
@@ -70,6 +77,7 @@ void Camera::processRotation(float dx, float dy, const QVector3D* target)
 	}
 
 	updateViewMatrix();
+	m_lastPoint = QPoint(x, y);
 }
 
 void Camera::processZoom(float delta) {
@@ -81,4 +89,23 @@ void Camera::processZoom(float delta) {
 	m_position = scale * m_position;
 	m_position += m_target;
 	updateViewMatrix();
+}
+
+
+void Camera::setIsPan(bool value) {
+	m_isPan = value;
+}
+void Camera::setIsRotating(bool value) {
+	m_isRotating = value;
+}
+
+void Camera::setLastPoint(const QPoint& lastPoint) {
+	m_lastPoint = lastPoint;
+}
+
+bool Camera::isPan() const {
+	return m_isPan;
+}
+bool Camera::isRotating() const {
+	return m_isRotating;
 }

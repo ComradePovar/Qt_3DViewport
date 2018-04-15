@@ -20,6 +20,8 @@ private:
 		OBJline(const QString& input);
 	};
 
+	bool m_containsNormals;
+	bool m_containsTexCoords;
 	QVector<Vertex> m_vertices;
 	QVector<unsigned int> m_indices;
 
@@ -28,17 +30,19 @@ private:
 	QVector3D parseVector3D(const QString& stringVector) const;
 	QVector2D parseVector2D(const QString& stringVector) const;
 	QVector<unsigned int> parceFace(const QString& faceString, const QVector<QVector3D>& vs,
-										  const QVector<QVector2D>& vts, const QVector<QVector3D>& vns) const;
+									const QVector<QVector2D>& vts, const QVector<QVector3D>& vns,
+									QVector<Vertex>& outputVertices) const;
 	QVector<unsigned int> triangulateFace(const QVector<unsigned int>& vertexIndices, const QVector<QVector3D>& positions) const;
 public:
-	OBJLoader(const QString& filename = nullptr) : m_filename(filename) {};
+	OBJLoader(const QString& filename = nullptr) : m_filename(filename), m_containsNormals(false), m_containsTexCoords(false) {};
 	
 	void loadModel();
 	void loadModel(const QString& filename);
 
 	QVector<Vertex> getVertices() const;
-	QVector<float> getTestVertices() const;
 	QVector<unsigned int> getIndices() const;
+	bool containsNormals() const { return m_containsNormals; };
+	bool containsTexCoords() const { return m_containsTexCoords; };
 };
 
 #endif

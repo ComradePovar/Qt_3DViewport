@@ -8,14 +8,13 @@
 class StandardShader : public Shader
 {
 public:
-	static StandardShader& instance();
-
+	StandardShader();
 	void setProjMatrix(QMatrix4x4& proj);
 	void setViewMatrix(QMatrix4x4& view);
 	void setModelMatrix(QMatrix4x4& model);
 	void setColor(QVector4D& color);
+
 private:
-	StandardShader();
 	const QString VERTEX_SHADER_PATH = ":/standard.vert";
 	const QString FRAGMENT_SHADER_PATH = ":/standard.frag";
 

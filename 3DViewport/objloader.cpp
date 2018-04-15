@@ -1,6 +1,6 @@
 #include <QFile>
 #include <QTextStream>
-#include <QSet>
+#include <QHash>
 
 #include "objloader.h"
 
@@ -71,7 +71,8 @@ QVector2D OBJLoader::parseVector2D(const QString& stringVector) const {
 }
 
 QVector<unsigned int> OBJLoader::parceFace(const QString& faceString, const QVector<QVector3D>& vs,
-										   const QVector<QVector2D>& vts, const QVector<QVector3D>& vns) const {
+										   const QVector<QVector2D>& vts, const QVector<QVector3D>& vns,
+										   QVector<Vertex>& outputVertices) const {
 	QVector<unsigned int> indices;
 	QList<QString> splittedFaceString = faceString.split(' ', QString::SkipEmptyParts);
 
@@ -108,6 +109,7 @@ QVector<unsigned int> OBJLoader::parceFace(const QString& faceString, const QVec
 				vertex.m_normal = vns[vert[2].toUInt() - 1];
 				break;
 		}
+		outputVertices.push_back(vertex);
 		indices.push_back(index);
 	}
 
@@ -185,21 +187,6 @@ QVector<Vertex> OBJLoader::getVertices() const {
 	return m_vertices;
 }
 
-QVector<float> OBJLoader::getTestVertices() const {
-	QVector<float> data;
-	for (int i = 0; i < m_vertices.size(); i++) {
-		data.push_back(m_vertices[i].m_position.x());
-		data.push_back(m_vertices[i].m_position.y());
-		data.push_back(m_vertices[i].m_position.z());
-
-		data.push_back(m_vertices[i].m_normal.x());
-		data.push_back(m_vertices[i].m_normal.y());
-		data.push_back(m_vertices[i].m_normal.z());
-	}
-
-	return data;
-}
-
 void OBJLoader::loadModel() {
 	QFile inputFile(m_filename);
 
@@ -208,6 +195,7 @@ void OBJLoader::loadModel() {
 		QVector<QVector3D> positions;
 		QVector<QVector3D> normals;
 		QVector<QVector2D> texCoords;
+		QHash<unsigned int, Vertex> tempVertices;
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
@@ -216,6 +204,9 @@ void OBJLoader::loadModel() {
 
 			if (objLine.type == "v") {
 				positions.push_back(parseVector3D(objLine.data));
+				/*Vertex v;
+				v.m_position;
+				m_vertices.push_back(v);*/
 			}
 			else if (objLine.type == "vt") {
 				texCoords.push_back(parseVector2D(objLine.data));
@@ -224,15 +215,27 @@ void OBJLoader::loadModel() {
 				normals.push_back(parseVector3D(objLine.data));
 			}
 			else if (objLine.type == "f") {
-				QVector<unsigned int> faceVertices = parceFace(objLine.data, positions, texCoords, normals);
-				//QVector<unsigned int> indices = triangulateFace(faceVertices, positions);
+				QVector<Vertex> vertices;
+				QVector<unsigned int> faceVertices = parceFace(objLine.data, positions, texCoords, normals, vertices);
+				for (int i = 0; i < faceVertices.size(); i++) {
+					tempVertices[faceVertices[i]] = vertices[i];
+				}
+
 				m_indices.append(faceVertices);
 				m_indices.push_back(positions.size());
 			}
 		}
-		for (int i = 0; i < positions.length(); i++) {
-			Vertex v(positions[i]);
-			m_vertices.push_back(v);
+
+		int tempVerticesSize = tempVertices.size();
+		for (int i = 0; i < tempVerticesSize; i++) {
+			m_vertices.push_back(tempVertices[i]);
+		}
+
+		if (!normals.isEmpty()) {
+			m_containsNormals = true;
+		}
+		if (!texCoords.isEmpty()) {
+			m_containsTexCoords = true;
 		}
 
 		inputFile.close();

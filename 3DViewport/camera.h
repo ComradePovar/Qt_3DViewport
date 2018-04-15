@@ -19,13 +19,24 @@ public:
 	void processPan(float dx, float dy);
 	void processRotation(float dx, float dy, const QVector3D* target);
 	void processZoom(float delta);
+
+	bool isPan() const;
+	bool isRotating() const;
+	void setIsPan(bool value);
+	void setIsRotating(bool value);
+	void setLastPoint(const QPoint& lastPoint);
 private:
+	bool m_isPan;
+	bool m_isRotating;
+	QPoint m_lastPoint;
+
 	QMatrix4x4 m_proj;
 	QMatrix4x4 m_view;
 
 	QVector3D m_right;
 	QVector3D m_up;
 	QVector3D m_target;
+
 
 	void updateViewMatrix();
 

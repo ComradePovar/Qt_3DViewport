@@ -1,67 +1,77 @@
 #include <QFile>
-
+#include <QOpenGLFunctions_4_3_Core>
 #include "scene.h"
+#include "objloader.h"
+#include "shaderbuilder.h"
 
-Scene::Scene()
+Scene::Scene(QOpenGLFunctions_4_3_Core* glFunctions, Camera* mainCamera, QVector<Model*>& defaultModels)
+	: m_mainCamera(mainCamera), m_defaultModels(defaultModels), m_glFunctions(glFunctions)
 {
 }
 
-int Scene::addModel(QString filename) {
-	//if (!filename.endsWith(".obj")) {
-	//	return -1;
-	//}
+void Scene::addModel(const QString& filename) {
+	OBJLoader loader(filename);
+	loader.loadModel();
 
-	//QVector<QVector3D> vertices;
-	//QVector<QVector3D> normals;
-	//QVector<GLuint> qIndices;
-	//QVector<GLuint> tIndices;
+	auto vertices = loader.getVertices();
+	QVector<QVector3D> positions;
+	QVector<QVector3D> normals;
+	QVector<QVector2D> texCoords;
+	for (int i = 0; i < vertices.size(); i++) {
+		positions.push_back(vertices[i].m_position);
 
-	//QFile inputFile(filename);
-	//if (inputFile.open(QIODevice::ReadOnly)) {
-	//	QTextStream in(&inputFile);
+		if (loader.containsNormals()) {
+			normals.push_back(vertices[i].m_normal);
+		}
+		if (loader.containsTexCoords()) {
+			texCoords.push_back(vertices[i].m_texCoord);
+		}
+	}
 
-	//	while (!in.atEnd()) {
-	//		QString line = in.readLine();
-
-	//		auto list = line.split(' ');
-
-	//		if (list[0] == "v ") {
-	//			vertices.push_back(QVector3D(list[1].toFloat(), list[2].toFloat(), list[3].toFloat()));
-	//		}
-	//		else if (list[0] == "vn ") {
-	//			normals.push_back(QVector3D(list[1].toFloat(), list[2].toFloat(), list[3].toFloat()));
-	//		}
-	//		else if (list[0] == "f ") {
-	//			QVector<GLuint>* currentIndexBuffer = list.size() == 4 ? &tIndices : &qIndices; // isTriangle
-
-	//			for (int i = 1; i < list.size(); i++) {
-	//				auto splited = list[i].split("//");
-	//				GLuint v = splited[0].toUInt();
-	//				GLuint vn = splited[1].toUInt();
-	//				currentIndexBuffer->push_back(v);
-	//				
-	//				
-	//			}
-	//			indices.push_back(list[1])
-	//		}
-	//	}
-
-	//	inputFile.close();
-	//}
-
-	throw std::exception("Not implemented.");
+	Model* newModel = new Model(ShaderBuilder::getShader(ShaderType::Standard), positions, loader.getIndices(),
+								normals, texCoords);
+	addModel(newModel);
 }
 
 void Scene::addModel(Model* model) {
-	m_models.insert(model->getId(), model);
+	m_sceneModels.insert(model->getId(), model);
 }
 
 Model* Scene::getModel(int id) const {
-	return m_models[id];
+	return m_sceneModels[id];
 }
 
 void Scene::removeModel(int id) {
-	m_models.remove(id);
+	m_sceneModels.remove(id);
+}
+
+
+void Scene::loadDefaultModels() {
+	for (const auto& model : m_defaultModels) {
+		m_sceneModels.insert(model->getId(), model);
+	}
+}
+
+void Scene::render() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_PRIMITIVE_RESTART);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	for (const auto& model : m_sceneModels) {
+		m_glFunctions->glPrimitiveRestartIndex(model->getVerticesCount());
+		StandardShader* shader = reinterpret_cast<StandardShader*>(model->getShader());
+		shader->bind();
+		shader->setProjMatrix(m_mainCamera->getProjMatrix());
+		shader->setViewMatrix(m_mainCamera->getViewMatrix());
+		shader->setModelMatrix(model->getModelMatrix());
+		shader->setColor(QVector4D(0, 0, 0, 1));
+		model->render();
+	}
+}
+
+Camera* Scene::getCamera() const {
+	return m_mainCamera;
 }
 
 Scene::~Scene()

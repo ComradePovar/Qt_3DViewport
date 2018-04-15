@@ -2,17 +2,29 @@
 
 int Model::m_nextId = 0;
 
-Model::Model(QVector<GLfloat> data, QVector<GLuint> indices) {
-	m_mesh = new Mesh(data, indices);
-	m_modelMatrix = QMatrix4x4();
-	m_modelMatrix.setToIdentity();
-	m_pivot = QVector3D();
+Model::Model() {
+	m_shader = nullptr;
+	m_mesh = nullptr;
+	m_id = m_nextId++;
+}
+Model::Model(Shader* shader, QVector<QVector3D>& vertices, QVector<GLuint>& indices,
+			 QVector<QVector3D>& normals, QVector<QVector2D>& texCoords) {
+	init(shader, vertices, indices, normals, texCoords);
 	m_id = m_nextId++;
 }
 
-void Model::draw(GLenum mode) {
+void Model::init(Shader* shader, QVector<QVector3D>& vertices, QVector<GLuint>& indices,
+				QVector<QVector3D>& normals, QVector<QVector2D>& texCoords) {
+	m_shader = shader;
+	m_mesh = new Mesh(vertices, indices, normals, texCoords);
+	m_modelMatrix = QMatrix4x4();
+	m_modelMatrix.setToIdentity();
+	m_pivot = QVector3D();
+}
+
+void Model::render() {
 	m_mesh->bindVAO();
-	glDrawElements(mode, m_mesh->getIndicesCount(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLE_FAN, m_mesh->getIndicesCount(), GL_UNSIGNED_INT, 0);
 }
 
 int Model::getId() const {

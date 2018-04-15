@@ -31,8 +31,3 @@ void StandardShader::setColor(QVector4D& color) {
 	m_program.bind();
 	m_program.setUniformValue(m_colorLocation, color);
 }
-
-StandardShader& StandardShader::instance() {
-	static StandardShader standardShader;
-	return standardShader;
-}
