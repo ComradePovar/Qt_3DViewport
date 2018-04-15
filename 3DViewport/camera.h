@@ -31,7 +31,7 @@ private:
 
 	float m_zoom;
 	const float ZOOM_SPEED = 0.0005f;
-	const float MOVEMENT_SPEED = 0.001f;
+	const float MOVEMENT_SPEED = 0.005f;
 	const float ROTATION_SPEED = 0.1f;
 };
 

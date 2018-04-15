@@ -39,6 +39,7 @@ private:
 	Model* m_cube;
 	Model* m_grid;
 	Camera* m_camera;
+	Model* m_loadedCube;
 	StandardShader* m_standardShader;
 };
 

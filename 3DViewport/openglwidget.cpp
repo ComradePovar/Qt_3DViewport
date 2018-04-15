@@ -2,6 +2,7 @@
 #include <QKeyEvent>
 #include <qapplication.h>
 
+#include "objloader.h"
 #include "openglwidget.h"
 #include "standardshader.h"
 #include "samplemodels.h"
@@ -26,9 +27,14 @@ void OpenGLWidget::initializeGL() {
 	m_cube = new Model(quadData, quadIndices);
 	m_scene->addModel(m_cube);
 
+	OBJLoader loader("test7.obj");
+	loader.loadModel();
+	m_loadedCube = new Model(loader.getTestVertices(), loader.getIndices());
+	//m_scene->addModel(m_loadedCube);
+
 	glEnable(GL_PRIMITIVE_RESTART);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPrimitiveRestartIndex(quadData.size() / 6);
+	glPrimitiveRestartIndex(loader.getVertices().size());
 }
 
 void OpenGLWidget::paintGL() {
@@ -41,13 +47,14 @@ void OpenGLWidget::paintGL() {
 	m_standardShader->setModelMatrix(m_cube->getModelMatrix());
 	m_standardShader->setColor(QVector4D(0, 0, 0, 1));
 
-	m_cube->draw(GL_TRIANGLE_STRIP);
+	//m_cube->draw(GL_TRIANGLE_STRIP);
+	m_loadedCube->draw(GL_TRIANGLE_FAN);
 	m_standardShader->unbind();
 }
 
 void OpenGLWidget::resizeGL(int width, int height) {
 	QMatrix4x4 proj;
-	proj.perspective(45.0f, GLfloat(width) / height, 0.01f, 100.0f);
+	proj.perspective(45.0f, GLfloat(width) / height, 0.01f, 10000.0f);
 	m_camera->setProjMatrix(proj);
 }
 

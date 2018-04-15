@@ -5,6 +5,7 @@ int Model::m_nextId = 0;
 Model::Model(QVector<GLfloat> data, QVector<GLuint> indices) {
 	m_mesh = new Mesh(data, indices);
 	m_modelMatrix = QMatrix4x4();
+	m_modelMatrix.setToIdentity();
 	m_pivot = QVector3D();
 	m_id = m_nextId++;
 }

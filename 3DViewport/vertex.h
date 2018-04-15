@@ -15,5 +15,11 @@ public:
 		: m_position(pos), m_normal(normal), m_texCoord(texCoord) {}
 };
 
+inline bool operator==(const Vertex& left, const Vertex& right) {
+	return left.m_position == right.m_position && left.m_normal == right.m_normal && left.m_texCoord == right.m_texCoord;
+}
 
+inline bool operator!=(const Vertex& left, const Vertex& right) {
+	return !operator==(left, right);
+}
 #endif
