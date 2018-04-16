@@ -68,12 +68,8 @@ void Scene::render() {
 			continue;
 		}
 		m_glFunctions->glPrimitiveRestartIndex(model->getVerticesCount());
-		StandardShader* shader = reinterpret_cast<StandardShader*>(model->getShader());
-		shader->bind();
-		shader->setProjMatrix(m_mainCamera->getProjMatrix());
-		shader->setViewMatrix(m_mainCamera->getViewMatrix());
-		shader->setModelMatrix(model->getModelMatrix());
-		shader->setColor(QVector4D(0, 0, 0, 1));
+		model->getShader()->applyShaderSettings(this, model);
+		
 		model->render();
 	}
 }

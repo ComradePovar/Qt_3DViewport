@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QOpenGLFunctions_4_3_Core>
 
 #include "model.h"
 #include "camera.h"
