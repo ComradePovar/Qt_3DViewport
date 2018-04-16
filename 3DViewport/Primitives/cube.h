@@ -2,8 +2,7 @@
 #define CUBE_H
 
 #include "../model.h"
-class Cube :
-	public Model
+class Cube : public Model
 {
 private:
 	QVector<QVector3D> m_vertices{ QVector3D(-0.5f, 0.5f, -0.5f),

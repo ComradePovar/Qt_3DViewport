@@ -1,4 +1,5 @@
 #include "standardshader.h"
+#include "scene.h"
 
 StandardShader::StandardShader() {
 	m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
@@ -30,4 +31,12 @@ void StandardShader::setModelMatrix(QMatrix4x4& model) {
 void StandardShader::setColor(QVector4D& color) {
 	m_program.bind();
 	m_program.setUniformValue(m_colorLocation, color);
+}
+
+void StandardShader::applySettings(const Scene* scene, const Model* model) {
+	bind();
+	setProjMatrix(scene->getCamera()->getProjMatrix());
+	setViewMatrix(scene->getCamera()->getViewMatrix());
+	setModelMatrix(model->getModelMatrix());
+	setColor(QVector4D(0, 0, 0, 1));
 }
