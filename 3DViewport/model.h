@@ -8,9 +8,10 @@
 #include "mesh.h"
 #include "shader.h"
 #include "vertex.h"
+#include "renderable.h"
 
 
-class Model
+class Model : public Renderable
 {
 public:
 	Model();

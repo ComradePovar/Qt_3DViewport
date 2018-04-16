@@ -14,6 +14,11 @@ Camera::Camera(QVector3D& position, QVector3D& target, QVector3D& up) {
 	updateViewMatrix();
 }
 
+void Camera::resize(int w, int h) {
+	QMatrix4x4 proj;
+	proj.perspective(45.0f, static_cast<float>(w) / h, 0.01f, 10000.0f);
+	setProjMatrix(proj);
+}
 QMatrix4x4 Camera::getProjMatrix() const {
 	return m_proj;
 }
@@ -92,17 +97,18 @@ void Camera::processZoom(float delta) {
 }
 
 
-void Camera::setIsPan(bool value) {
+void Camera::setIsPan(bool value, const QPoint& lastPoint) {
 	m_isPan = value;
+	if (m_isPan) {
+		m_lastPoint = lastPoint;
+	}
 }
-void Camera::setIsRotating(bool value) {
+void Camera::setIsRotating(bool value, const QPoint& lastPoint) {
 	m_isRotating = value;
+	if (m_isRotating) {
+		m_lastPoint = lastPoint;
+	}
 }
-
-void Camera::setLastPoint(const QPoint& lastPoint) {
-	m_lastPoint = lastPoint;
-}
-
 bool Camera::isPan() const {
 	return m_isPan;
 }

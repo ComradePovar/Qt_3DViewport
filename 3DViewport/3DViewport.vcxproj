@@ -125,13 +125,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="cube.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="openglwidget.cpp" />
+    <ClCompile Include="Primitives\cube.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="standardshader.cpp" />
   </ItemGroup>
@@ -151,10 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
-    <ClInclude Include="cube.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="Primitives\cube.h" />
     <ClInclude Include="renderable.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />

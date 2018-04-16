@@ -42,7 +42,12 @@ Model* Scene::getModel(int id) const {
 }
 
 void Scene::removeModel(int id) {
-	m_sceneModels.remove(id);
+	auto modelIt = m_sceneModels.find(id);
+	if (modelIt != m_sceneModels.end() && modelIt.key() == id) {
+		delete modelIt.value()->getShader();
+		m_sceneModels.remove(id);
+		delete modelIt.value();
+	}
 }
 
 
@@ -59,6 +64,9 @@ void Scene::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	for (const auto& model : m_sceneModels) {
+		if (model->isHidden()) {
+			continue;
+		}
 		m_glFunctions->glPrimitiveRestartIndex(model->getVerticesCount());
 		StandardShader* shader = reinterpret_cast<StandardShader*>(model->getShader());
 		shader->bind();
@@ -76,4 +84,9 @@ Camera* Scene::getCamera() const {
 
 Scene::~Scene()
 {
+	for (auto model : m_sceneModels) {
+		delete model->getShader();
+		delete model;
+	}
+	m_sceneModels.clear();
 }

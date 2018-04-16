@@ -5,7 +5,7 @@
 #include "objloader.h"
 #include "openglwidget.h"
 #include "standardshader.h"
-#include "cube.h"
+#include "Primitives/cube.h"
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent) {
@@ -21,6 +21,7 @@ void OpenGLWidget::initializeGL() {
 	m_mainCamera = new Camera();
 	m_scene = new Scene(this, m_mainCamera, m_defaultModels);
 	m_scene->loadDefaultModels();
+	m_scene->removeModel(1);
 }
 
 void OpenGLWidget::paintGL() {
@@ -28,21 +29,17 @@ void OpenGLWidget::paintGL() {
 }
 
 void OpenGLWidget::resizeGL(int width, int height) {
-	QMatrix4x4 proj;
-	proj.perspective(45.0f, GLfloat(width) / height, 0.01f, 10000.0f);
-	m_scene->getCamera()->setProjMatrix(proj);
+	m_scene->getCamera()->resize(width, height);
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent* event) {
 	if (event->buttons() & Qt::MiddleButton) {
 		Camera* camera = m_scene->getCamera();
-		camera->setLastPoint(event->pos());
-		camera->setIsPan(true);
+		camera->setIsPan(true, event->pos());
 	}
 	if (event->buttons() & Qt::RightButton) {
 		Camera* camera = m_scene->getCamera();
-		camera->setLastPoint(event->pos());
-		camera->setIsRotating(true);
+		camera->setIsRotating(true, event->pos());
 	}
 }
 

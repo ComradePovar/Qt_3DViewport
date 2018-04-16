@@ -3,7 +3,7 @@
 
 class Renderable {
 private:
-	bool m_hidden;
+	bool m_hidden = false;
 public:
 	bool isHidden() const { return m_hidden; }
 	void hide() { m_hidden = true; }

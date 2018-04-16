@@ -26,7 +26,7 @@
     <ClCompile Include="objloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cube.cpp">
+    <ClCompile Include="Primitives\cube.cpp">
       <Filter>Source Files\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,7 +113,7 @@
     <ClInclude Include="renderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cube.h">
+    <ClInclude Include="Primitives\cube.h">
       <Filter>Header Files\Primitives</Filter>
     </ClInclude>
   </ItemGroup>

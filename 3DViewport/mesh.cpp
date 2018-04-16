@@ -53,7 +53,6 @@ void Mesh::createBuffer(QOpenGLBuffer* buffer, QVector<T>& data) {
 void Mesh::setupVAO() {
 	Q_ASSERT(!m_vertices.isEmpty() && !m_indices.isEmpty());
 	
-	auto s =sizeof(QVector3D);
 	m_VAO.create();
 	bindVAO();
 
@@ -62,24 +61,29 @@ void Mesh::setupVAO() {
 	m_verticesVBO = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 	createBuffer(m_verticesVBO, m_vertices);
 
+	f->glEnableVertexAttribArray(0);
+	f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), reinterpret_cast<void*>(0));
+
 	if (!m_normals.isEmpty()) {
 		m_normalsVBO= new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 		createBuffer(m_normalsVBO, m_normals);
+
+		f->glEnableVertexAttribArray(1);
+		f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), reinterpret_cast<void*>(0));
 	}
 
 	if (!m_texCoords.isEmpty()) {
 		m_texCoordsVBO = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
 		createBuffer(m_texCoordsVBO, m_texCoords);
+
+		f->glEnableVertexAttribArray(2);
+		f->glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), reinterpret_cast<void*>(0));
 	}
 
 	m_ebo = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
 	createBuffer(m_ebo, m_indices);
 
 	
-	f->glEnableVertexAttribArray(0);
-	f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), reinterpret_cast<void*>(0));
-	f->glEnableVertexAttribArray(1);
-	f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), reinterpret_cast<void*>(sizeof(QVector3D)));
 
 	m_VAO.release();
 }

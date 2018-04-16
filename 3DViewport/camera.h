@@ -22,9 +22,9 @@ public:
 
 	bool isPan() const;
 	bool isRotating() const;
-	void setIsPan(bool value);
-	void setIsRotating(bool value);
-	void setLastPoint(const QPoint& lastPoint);
+	void setIsPan(bool value, const QPoint& lastPoint = QPoint());
+	void setIsRotating(bool value, const QPoint& lastPoint = QPoint());
+	void resize(int w, int h);
 private:
 	bool m_isPan;
 	bool m_isRotating;
