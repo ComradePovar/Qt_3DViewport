@@ -13,7 +13,6 @@ public:
 	void setViewMatrix(QMatrix4x4& view);
 	void setModelMatrix(QMatrix4x4& model);
 	void setColor(QVector4D& color);
-	void applySettings(const Scene* scene, const Model* model) override;
 
 private:
 	const QString VERTEX_SHADER_PATH = ":/standard.vert";

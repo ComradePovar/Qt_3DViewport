@@ -2,9 +2,7 @@
 #define SCENE_H
 
 #include <QString>
-#include <QVector>
 #include <QMap>
-#include <QOpenGLFunctions_4_3_Core>
 
 #include "model.h"
 #include "camera.h"
